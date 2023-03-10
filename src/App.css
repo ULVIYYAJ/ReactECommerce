@@ -272,3 +272,92 @@
   flex-direction: column;
   align-items: center;
 }
+
+.login{
+  display: inline-block;
+  margin-right: 1.5rem;
+}
+.login :last-child{
+  margin-right: 0;
+}
+.authWrapper{
+  display: block;
+  width: 30%;
+  max-height: 40.0rem;
+  margin: 4rem auto 6rem;
+  border: 1px solid black;
+}
+/* .signup .wrap{
+  padding:10px;
+} */
+.authWrapper .wrap{
+  padding:10px;
+}
+/* .signup .wrap h2{
+  font-size: 2.2rem;
+  line-height: 1;
+  font-weight: 400;
+  text-transform: uppercase;
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin: 0 auto 3rem;
+  padding: 0;
+} */
+.authWrapper .wrap h2{
+  font-size: 2.2rem;
+  line-height: 1;
+  font-weight: 400;
+  text-transform: uppercase;
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin: 0 auto 3rem;
+  padding: 0;
+}
+.btn{
+  display: block;
+  width: 100%;
+  background: black;
+  color: white;
+  padding: 1rem 0;
+  margin: 0 auto;
+  font-size: 1.8rem;
+  line-height: 1;
+  font-weight: 300;
+  text-transform: uppercase;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+}
+.socialSignin{
+  margin: 0.5rem auto 0;
+}
+.logout{
+  color: white;
+  cursor: pointer;
+}
+.formRow input{
+  display: block;
+  width: 100%;
+  padding: 10px 5px;
+  margin: 10px auto;
+  font-size: 1.5rem;
+  line-height: 1;
+  font-weight: 400;
+  text-align: left;
+  border: 1px solid #9e9e9e;
+  outline: none;
+}
+.formWrap{
+  margin: 3rem auto 0;
+}
+.links{
+  display: block;
+  width: 30%;
+  margin: 1.5rem auto 0;
+}
+.links a{
+  color: black;
+  text-decoration: none;
+}

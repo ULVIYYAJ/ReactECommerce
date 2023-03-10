@@ -7,7 +7,7 @@ const initialState = {
 export const fetchAsyncCart = createAsyncThunk(
     "photos/fetchAsyncCart",
     async () => {
-        const response = await wishlistApi.get(`https://dummyjson.com/products`)
+        const response = await wishlistApi.get(`REACT_APP_API_URL`)
         return response.data;
     }
 )
