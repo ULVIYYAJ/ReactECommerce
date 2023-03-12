@@ -3,14 +3,15 @@ import FormInput from '../../forms/FormInput';
 import Button from '../../forms';
 import { auth, handleUserProfile } from "../../firebase/utils";
 import AuthWrapper from "../AuthWrapper";
+import { useNavigate } from "react-router-dom";
 
-
-const Signup = props => {
+const Signup = () => {
     const [displayName, setDisplayName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errors, setErrors] = useState([]);
+    const navigate = useNavigate();
     
     const reset = () =>{
         setDisplayName('');
@@ -32,6 +33,7 @@ const Signup = props => {
            const { user } =  await auth.createUserWithEmailAndPassword(email,password);
             await handleUserProfile(user, {displayName});
             reset();
+            navigate('/');
 
         }catch(err){
             // console.log(err);

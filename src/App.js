@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import "react-toastify/dist/ReactToastify.css";
 import { Route, BrowserRouter, Routes, Navigate, } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -11,9 +11,13 @@ import Registration from './pages/Registration';
 import Login from './pages/Login';
 import { auth, handleUserProfile } from './firebase/utils';
 import Recovery from './pages/Recovery';
+import { setCurrentUser } from './redux/User/user.actions';
+import { connect } from 'react-redux';
+import Dashboard from './pages/Dashboard';
+import WithAuth from './hoc/withAuth';
 
-const App = () => {
-  const [currentUser, setCurrentUser] = useState(null);
+const App = props => {
+  const {setCurrentUser, currentUser} = props;
 
   useEffect(() => {
     const authListener = auth.onAuthStateChanged(async userAuth => {
@@ -25,11 +29,12 @@ const App = () => {
             ...snapshot.data()
           });
         });
-      } else {
-        setCurrentUser(null);
       }
+        setCurrentUser(userAuth);
     });
-    return authListener;
+    return ()=>{
+      authListener();
+    };
   }, []);
 
   return (
@@ -39,22 +44,40 @@ const App = () => {
         </ToastContainer>
         <NavBar currentUser={currentUser} />
         <Routes>
-          <Route path='/cart' exact element={<Cart />} currentUser={currentUser} />
-          <Route path='/' exact element={<Home />} currentUser={currentUser} />
+          <Route path='/cart' exact element={<Cart />}  />
+          <Route path='/' exact element={<Home />}  />
           <Route path="/" element={<Navigate to="not-found" />} />
           <Route path="not-found" element={<NotFound />} />
           <Route path="*" element={<Navigate to="not-found" />} />
-          <Route path='/registration' exact element={currentUser ? <Navigate to='/' /> : <Registration />} />
-          <Route path='/login' element={currentUser ? <Navigate to='/' /> : <Login currentUser={currentUser} />} />
-          <Route path='/recovery' exact element={<Recovery />} />
+          {/* <Route path='/registration' exact element={currentUser ? <Navigate to='/' /> : <Registration />} /> */}
+          <Route path='/registration' exact element={<Registration />} />
+
+          {/* <Route path='/login' element={currentUser ? <Navigate to='/' /> : <Login currentUser={currentUser} />} /> */}
+          <Route path='/login' element={<Login/>} />
+
+          <Route path='/recovery' exact element={<Recovery />} />  
+          <Route path='/dashboard' element={<WithAuth><Dashboard /></WithAuth>} />
         </Routes>
       </BrowserRouter>
     </div>
   );
 }
 
+const mapStateToProps = ({user}) =>{
+  if (user) {
+    return {
+      currentUser: user.currentUser
+    }
+  } else {
+    return {
+      currentUser: null
+    }
+  }
+};
 
-export default App;
+const mapDispatchToProps = dispatch =>({
+  setCurrentUser:user=>dispatch(setCurrentUser(user))
+})
 
 
-
+export default connect(mapStateToProps, mapDispatchToProps)(App);

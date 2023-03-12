@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { auth } from "../firebase/utils";
-// import { connect } from "react-redux";
+import { connect } from "react-redux";
 
 const NavBar = props => {
     const { currentUser } = props;
@@ -25,7 +25,7 @@ const NavBar = props => {
                 <ul>
                     <li className="login">
                         <Link to='/dashboard'>
-                            Dashboard
+                            My account
                         </Link>
                     </li>
                     <li>
@@ -37,11 +37,6 @@ const NavBar = props => {
             )}
             {!currentUser && (
                 <ul>
-                    <li className="login">
-                        <Link to='/dashboard'>
-                            Dashboard
-                        </Link>
-                    </li>
                     <li className="login">
                         <Link to='/registration'>
                             Register
@@ -61,7 +56,7 @@ const NavBar = props => {
 NavBar.defaultProps = {
     currentUser: null
 }
-// const mapStateToProps = ({user}) =>({
-//     currentUser: user ? user.currentUser : null
-// });
-export default NavBar;
+const mapStateToProps = ({user}) =>({
+    currentUser: user ? user.currentUser : null
+});
+export default connect(mapStateToProps, null)(NavBar);

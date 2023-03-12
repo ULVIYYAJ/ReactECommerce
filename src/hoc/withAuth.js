@@ -1,16 +1,20 @@
-// import { useAuth } from "../customHooks";
-// import { useNavigate } from 'react-router-dom';
+import { useAuth } from "../customHooks";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-// const WithAuth = props => {
-//   const navigate = useNavigate();
-//   const isAuthenticated = useAuth(props);
+const WithAuth = (props) => {
+  const navigate = useNavigate();
+  const currentUser = useAuth();
 
-//   if (isAuthenticated) {
-//     return props.children;
-//   } else {
-//     navigate('/login');
-//     return null;
-//   }
-// }
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/login");
+    }
+  }, [currentUser, navigate]);
 
-// export default WithAuth;
+  return currentUser ? props.children : null;
+};
+
+export default WithAuth;
+
+

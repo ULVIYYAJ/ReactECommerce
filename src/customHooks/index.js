@@ -1,4 +1,4 @@
-// import useAuth from "./useAuth";
-// export {
-//     useAuth
-// };
+import useAuth from "./useAuth";
+export {
+    useAuth
+};
