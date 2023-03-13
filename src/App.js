@@ -12,49 +12,45 @@ import Login from './pages/Login';
 import { auth, handleUserProfile } from './firebase/utils';
 import Recovery from './pages/Recovery';
 import { setCurrentUser } from './redux/User/user.actions';
-import { connect } from 'react-redux';
+import { useDispatch} from 'react-redux';
 import Dashboard from './pages/Dashboard';
 import WithAuth from './hoc/withAuth';
 
 const App = props => {
-  const {setCurrentUser, currentUser} = props;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const authListener = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await handleUserProfile(userAuth);
         userRef.onSnapshot(snapshot => {
-          setCurrentUser({
+          dispatch(setCurrentUser({
             id: snapshot.id,
             ...snapshot.data()
-          });
+          }));
         });
       }
-        setCurrentUser(userAuth);
+        dispatch(setCurrentUser(userAuth));
     });
     return ()=>{
       authListener();
     };
-  }, []);
+  }, [setCurrentUser]);
 
   return (
     <div className='App'>
       <BrowserRouter>
         <ToastContainer>
         </ToastContainer>
-        <NavBar currentUser={currentUser} />
+        <NavBar />
         <Routes>
           <Route path='/cart' exact element={<Cart />}  />
           <Route path='/' exact element={<Home />}  />
           <Route path="/" element={<Navigate to="not-found" />} />
           <Route path="not-found" element={<NotFound />} />
           <Route path="*" element={<Navigate to="not-found" />} />
-          {/* <Route path='/registration' exact element={currentUser ? <Navigate to='/' /> : <Registration />} /> */}
           <Route path='/registration' exact element={<Registration />} />
-
-          {/* <Route path='/login' element={currentUser ? <Navigate to='/' /> : <Login currentUser={currentUser} />} /> */}
           <Route path='/login' element={<Login/>} />
-
           <Route path='/recovery' exact element={<Recovery />} />  
           <Route path='/dashboard' element={<WithAuth><Dashboard /></WithAuth>} />
         </Routes>
@@ -62,22 +58,4 @@ const App = props => {
     </div>
   );
 }
-
-const mapStateToProps = ({user}) =>{
-  if (user) {
-    return {
-      currentUser: user.currentUser
-    }
-  } else {
-    return {
-      currentUser: null
-    }
-  }
-};
-
-const mapDispatchToProps = dispatch =>({
-  setCurrentUser:user=>dispatch(setCurrentUser(user))
-})
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

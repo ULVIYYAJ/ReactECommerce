@@ -1,17 +1,38 @@
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import FormInput from '../../forms/FormInput';
 import Button from '../../forms';
-import { auth, handleUserProfile } from "../../firebase/utils";
 import AuthWrapper from "../AuthWrapper";
 import { useNavigate } from "react-router-dom";
+import { useDispatch , useSelector } from "react-redux";
+import { signUpUser , resetAllAuthForms } from "../../redux/User/user.actions";
 
+const mapState = ({user})=>({
+    signUpSuccess: user.signUpSuccess,
+    signUpError: user.signUpError
+})
 const Signup = () => {
+    const {signUpSuccess, signUpError} = useSelector(mapState);
+    const dispatch = useDispatch();
     const [displayName, setDisplayName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errors, setErrors] = useState([]);
     const navigate = useNavigate();
+
+    useEffect(()=>{
+        if(signUpSuccess){
+            reset();
+            dispatch(resetAllAuthForms());
+            navigate('/');
+        }
+    }, [signUpSuccess, navigate]);
+
+    useEffect(()=>{
+        if(Array.isArray(signUpError) && signUpError.length > 0){
+            setErrors(signUpError);
+        }
+    }, [signUpError]);
     
     const reset = () =>{
         setDisplayName('');
@@ -22,22 +43,14 @@ const Signup = () => {
     }
 
 
-    const handleFormSubmit = async event =>{
+    const handleFormSubmit = event =>{
         event.preventDefault();
-        if(password !== confirmPassword){
-            const err = ['Password doesn\'t match'];
-            setErrors(err);
-            return;
-        }
-        try{
-           const { user } =  await auth.createUserWithEmailAndPassword(email,password);
-            await handleUserProfile(user, {displayName});
-            reset();
-            navigate('/');
-
-        }catch(err){
-            // console.log(err);
-        }
+        dispatch(signUpUser({
+            displayName,
+            email,
+            password,
+            confirmPassword
+        }));
     }
         const configAuthWrapper = {
             headline:'Registration'
