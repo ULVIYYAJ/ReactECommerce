@@ -9,9 +9,8 @@ import Home from './components/Home';
 import NotFound from './components/NotFound';
 import Registration from './pages/Registration';
 import Login from './pages/Login';
-import { auth, handleUserProfile } from './firebase/utils';
 import Recovery from './pages/Recovery';
-import { setCurrentUser } from './redux/User/user.actions';
+import { checkUserSession} from './redux/User/user.actions';
 import { useDispatch} from 'react-redux';
 import Dashboard from './pages/Dashboard';
 import WithAuth from './hoc/withAuth';
@@ -20,22 +19,8 @@ const App = props => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const authListener = auth.onAuthStateChanged(async userAuth => {
-      if (userAuth) {
-        const userRef = await handleUserProfile(userAuth);
-        userRef.onSnapshot(snapshot => {
-          dispatch(setCurrentUser({
-            id: snapshot.id,
-            ...snapshot.data()
-          }));
-        });
-      }
-        dispatch(setCurrentUser(userAuth));
-    });
-    return ()=>{
-      authListener();
-    };
-  }, [setCurrentUser]);
+    dispatch(checkUserSession());
+  }, []);
 
   return (
     <div className='App'>

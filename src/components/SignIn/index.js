@@ -4,26 +4,25 @@ import Buttons from "../../forms";
 import FormInput from "../../forms/FormInput";
 import AuthWrapper from "../AuthWrapper";
 import { Link, useNavigate} from "react-router-dom";
-import { signInUser , signInWithGoogle , resetAllAuthForms } from "../../redux/User/user.actions";
+import { emailSignInStart , googleSignInStart } from "../../redux/User/user.actions";
 
 const mapState = ({user})=>({
-    signInSuccess: user.signInSuccess
+    currentUser: user.currentUser
 });
 
 const SignIn = props => {
-    const {signInSuccess} = useSelector(mapState);
     const dispatch = useDispatch();
+    const {currentUser} = useSelector(mapState);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
     useEffect(()=>{
-        if(signInSuccess){
+        if(currentUser){
             resetForm();
-            dispatch(resetAllAuthForms());
             navigate('/');
         }
-    }, [signInSuccess, navigate]);
+    }, [currentUser, navigate]);
 
 
     const resetForm = ()=>{
@@ -33,11 +32,11 @@ const SignIn = props => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        dispatch(signInUser({email, password}));
+        dispatch(emailSignInStart({email, password}));
     }
 
     const handleGoogleSignIn = () =>{
-        dispatch(signInWithGoogle());
+        dispatch(googleSignInStart());
     }
 
 
