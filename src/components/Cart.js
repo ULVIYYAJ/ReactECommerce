@@ -1,13 +1,21 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { clearCart, decreaseCart, getTotals, removeFromCart } from "../feauters/cartSlice";
 import { fetchAsyncCart } from "../feauters/cartSlice";
 import { addToCart } from "../feauters/cartSlice";
 
+const mapState = ({ user }) => ({
+    currentUser: user.currentUser
+});
+
 const Cart = () => {
     const cart = useSelector((state) => state.cart);
     const dispatch = useDispatch();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const navigate = useNavigate();
+    const { currentUser } = useSelector(mapState);
+
 
     useEffect(() => {
         dispatch(getTotals());
@@ -22,7 +30,6 @@ const Cart = () => {
     };
 
     const handleDecreaseCart = (cartItem) => {
-        // implement decrease cart quantity logic here
         dispatch(decreaseCart(cartItem))
     };
     const handleIncreaseCart = (cartItem) => {
@@ -31,6 +38,19 @@ const Cart = () => {
     const handleClearCart = () => {
         dispatch(clearCart());
     };
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate('/payment');
+        }
+    }, [isLoggedIn, navigate]);
+
+    const handleLogin = () => {
+        if (currentUser) {
+            setIsLoggedIn(true);
+        } else {
+            navigate('/login');
+        }
+    }
     return (
         <div className="cart-container">
             <h2>Shopping Cart</h2>
@@ -91,7 +111,7 @@ const Cart = () => {
                             </div>
                             <p>Taxes and shipping calculated at checkout</p>
 
-                            <button>Login to Checkout</button>
+                            <button onClick={() => handleLogin()} >{currentUser ? "Shop Now" : "Checkout to Login"}</button>
                             <div className="continue-shopping">
                                 <Link to='/' >
                                     <svg xmlns="http://www.w3.org/2000/svg"

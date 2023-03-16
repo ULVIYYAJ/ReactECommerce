@@ -1,4 +1,4 @@
-import { resolve } from "@reach/router/lib/utils";
+// import { resolve } from "@reach/router/lib/utils";
 import { auth } from "../../firebase/utils";
 
 export const handleResetPasswordAPI = (email) =>{

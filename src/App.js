@@ -14,6 +14,10 @@ import { checkUserSession} from './redux/User/user.actions';
 import { useDispatch} from 'react-redux';
 import Dashboard from './pages/Dashboard';
 import WithAuth from './hoc/withAuth';
+import Admin from './pages/Admin';
+import WithAdminAuth from './hoc/withAdminAuth';
+import AdminToolbar from './components/AdminToolbar';
+import Payment from './pages/Payment';
 
 const App = props => {
   const dispatch = useDispatch();
@@ -28,6 +32,7 @@ const App = props => {
         <ToastContainer>
         </ToastContainer>
         <NavBar />
+        <AdminToolbar/>
         <Routes>
           <Route path='/cart' exact element={<Cart />}  />
           <Route path='/' exact element={<Home />}  />
@@ -38,6 +43,8 @@ const App = props => {
           <Route path='/login' element={<Login/>} />
           <Route path='/recovery' exact element={<Recovery />} />  
           <Route path='/dashboard' element={<WithAuth><Dashboard /></WithAuth>} />
+          <Route path='/admin' element={ <WithAdminAuth><Admin/></WithAdminAuth>} />
+          <Route path='/payment' exact element={<Payment />}  />
         </Routes>
       </BrowserRouter>
     </div>

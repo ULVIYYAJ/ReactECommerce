@@ -364,3 +364,37 @@
 .dashboard{
   text-align: center;
 }
+
+.adminToolbar{
+  display: inline-block;
+  width: 100%;
+  background-color: black;
+  height: auto;
+  margin:0 auto;
+  padding: 0 10px;
+}
+.adminToolbar ul, li{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.adminToolbar ul{
+  float: right;
+}
+.adminToolbar li{
+  display: inline-block;
+}
+.adminToolbar li a{
+  display: block;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: white;
+  padding: 10px;
+  transition: all 0.4s ease-in-out;
+  text-decoration: none;
+}
+.adminToolbar li a:hover{
+  background-color: rgba(255,255,255,0.6);
+  color: black;
+  transition: all 0.4s ease-in-out;
+}
